@@ -1,18 +1,21 @@
 %{
-int nmacro, nheader;
+int tags;
 %}
 %%
-^#define { nmacro++; }
-^#include { nheader++; }
-.|\n {  }
+"<"[^>]*>  { tags++; printf("%s \n", yytext); }
+.|\n { }
 %%
 int yywrap(void) {
-return 1;
-}
-int main(int argc, char *argv[]) {
-yyin = fopen(argv[1], "r");
+return 1; }
+int main(void)
+{
+FILE *f;
+char file[10];
+printf("Enter File Name : ");
+scanf("%s",file);
+f = fopen(file,"r");
+yyin = f;
 yylex();
-printf("Number of macros defined = %d\n", nmacro);
-printf("Number of header files included = %d\n", nheader);
-fclose(yyin);
+printf("\n Number of html tags: %d",tags);
+fclose(yyin);  
 }
